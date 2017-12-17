@@ -1,6 +1,29 @@
-require('./b')
-require('./c')
-require('f')
-const b = 100
+import('./b')
+// import './d'
 
-function s () {}
+// import 'react-hot-loader/patch'
+// import { AppContainer } from 'react-hot-loader'
+//
+import React, { Component, Fragment } from 'react'
+// import { render } from 'react-dom'
+// import App from './app'
+//
+// render(
+//   <AppContainer>
+//     <Fragment>
+//       <App/>
+//     </Fragment>
+//   </AppContainer>,
+//   document.querySelector('#root')
+// )
+//
+// if (module.hot) {
+//   module.hot.accept(() => {
+//     render(
+//         <App/>,
+//       document.querySelector('#root')
+//     )
+//   })
+// }
+//
+// render(<App/>, document.body)

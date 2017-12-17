@@ -1,0 +1,23 @@
+{
+  "name": "stub",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "pkgr-cli dev",
+    "build": "pkgr-cli build"
+  },
+  "dependencies": {
+    "react": "^16.2.0",
+    "redux": "^3.7.2",
+    "react-dom": "^16.2.0",
+    "react-hot-loader": "^3.1.3",
+    "react-redux": "^5.0.6",
+    "react-router": "^4.2.0"
+  },
+  "devDependencies": {
+    "pkgr-cli": "^0.0.2",
+    "cross-env": "^5.1.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^2.0.0-alpha.3",
+    "babel-preset-react": "^6.24.1"
+  }
+}

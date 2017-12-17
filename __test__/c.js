@@ -1,3 +1,2 @@
-var e = require('./e')
-module.exports = {value: 'ccc'}
-console.log('c')
+import './d'
+console.log('c_file__')
