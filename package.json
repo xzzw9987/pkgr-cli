@@ -1,0 +1,14 @@
+{
+  "name": "pkgr-cli",
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": "xinzhongzhu",
+  "license": "MIT",
+  "dependencies": {
+    "babel-core": "^7.0.0-alpha.3",
+    "babel-traverse": "^7.0.0-alpha.3",
+    "babel-types": "^7.0.0-alpha.3",
+    "babylon": "^7.0.0-beta.7",
+    "chalk": "^2.3.0"
+  }
+}
