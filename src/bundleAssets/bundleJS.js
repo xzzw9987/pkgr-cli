@@ -1,4 +1,4 @@
-function parse (content, deps) {
+module.exports = (content, deps) => {
   const
     wrapped = `function(require,module,exports){${content}}`,
     s = Object.keys(deps)
@@ -9,5 +9,3 @@ function parse (content, deps) {
 
   return `[${wrapped},${JSON.stringify(s)}]`
 }
-
-module.exports = parse

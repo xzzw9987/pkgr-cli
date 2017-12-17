@@ -1,5 +1,0 @@
-var c = require('./c')
-var d = require('./d')
-console.log(c)
-console.log(d)
-console.log('b')
