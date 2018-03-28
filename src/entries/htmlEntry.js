@@ -40,7 +40,7 @@ module.exports = function htmlEntry (filename) {
     switch (node.tagName) {
       case 'head':
         if (conf.env === 'production') break
-        var clientScript = htmlUtils.createNode('script')
+        const clientScript = htmlUtils.createNode('script')
         htmlUtils.setText(clientScript, clientJS())
         htmlUtils.append(node, clientScript)
         break
