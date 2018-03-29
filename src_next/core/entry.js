@@ -10,11 +10,11 @@ class Entry {
     this.modules = {}
     this.modulesByFilename = {}
 
-    this.moduleId = 1
+    this._moduleId = 1
   }
 
   _makeModuleId () {
-    return this.moduleId++
+    return this._moduleId++
   }
 
   addChunk (chunk) {
@@ -23,20 +23,21 @@ class Entry {
 
   addModule (module) {
     this.modules[module.id] = module
+    this.modulesByFilename[module.filename] = module
   }
 
-  instChunk (initialModule) {
+  instChunkIfNeeded (initialModule) {
     if (this.chunks[initialModule.id]) return this.chunks[initialModule.id]
     return new Chunk(initialModule)
   }
 
-  instModule (filename) {
+  instModuleIfNeeded (filename) {
     if (this.modulesByFilename[filename]) return this.modulesByFilename[filename]
     return new Module(filename, this._makeModuleId())
   }
 
   isModuleExists (filename) {
-
+    return !!this.modulesByFilename[filename]
   }
 }
 

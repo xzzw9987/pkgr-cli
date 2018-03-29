@@ -7,7 +7,7 @@ const
   yargs = require('yargs'),
   cwd = process.cwd(),
   {error} = require('../src/utils/print'),
-  start = require('../src/index'),
+  start = require('../src_next/index'),
   init = require('../src/init'),
   builderOptions =
     yargs => yargs
@@ -42,17 +42,17 @@ const
       desc: 'Start a dev server',
       builder: builderOptions,
       handler: argv => {
-        try {
-          const
-            {config} = argv,
-            conf = require(path.resolve(cwd, config))
-          Object.defineProperty(conf, 'env', {value: 'development', enumerable: true})
-          start(conf)
-        }
-        catch (e) {
-          error(e.toString())
-          process.exit()
-        }
+        // try {
+        const
+          {config} = argv,
+          conf = require(path.resolve(cwd, config))
+        Object.defineProperty(conf, 'env', {value: 'development', enumerable: true})
+        start(conf)
+        // }
+        // catch (e) {
+        //   error(e.toString())
+        // process.exit()
+        // }
       }
     })
     .command({
