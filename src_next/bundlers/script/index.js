@@ -37,7 +37,8 @@ function bootstrap (additionalCode) {
                 script.src = '/' + chunkId + '.js'
                 script.onload = function() {
                     resolve(requireById(id))
-                 }
+                }
+                document.head.appendChild(script)
            })
         }
       }
