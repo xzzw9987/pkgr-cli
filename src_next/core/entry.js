@@ -6,7 +6,6 @@ class Entry {
   constructor (entryId) {
     this.entryId = entryId
     this.chunks = {}
-
     this.modules = {}
     this.modulesByFilename = {}
 

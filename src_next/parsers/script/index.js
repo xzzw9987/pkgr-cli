@@ -6,9 +6,7 @@ module.exports = async ({filename, entry, chunk, nextCall}) => {
     chunk = entry.instChunkIfNeeded(m)
     entry.addChunk(chunk)
   }
-
   chunk.addModule(m)
-
   if (!entry.isModuleExists(filename)) {
     entry.addModule(m)
     await m.parse()

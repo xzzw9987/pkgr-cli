@@ -12,8 +12,7 @@ module.exports = function (callback) {
         {bindings} = path.scope
       if (
         (name === 'require' && !('require' in bindings)) ||
-        (path.node.callee.type.toLowerCase() === 'import' && !('import' in bindings))
-      ) {
+        (path.node.callee.type.toLowerCase() === 'import' && !('import' in bindings))) {
         // Valid require
         const arg = path.node.arguments[0]
         if (!t.isStringLiteral(arg)) {
