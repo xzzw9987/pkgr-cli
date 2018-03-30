@@ -1,5 +1,6 @@
 const
-    fs = require('fs')
+  fs = require('fs'),
+  path = require('path')
 
 class Bundler {
   constructor (entry) {
@@ -8,19 +9,32 @@ class Bundler {
     this._chunkCode = []
   }
 
-  bundle () {
+  async bundle () {
     const initialChunkId = Math.min.apply(null, Object.keys(this._entry.chunks))
+
+    let src = []
 
     Object
       .keys(this._entry.chunks)
       .forEach(chunkId => {
+
+        // @todo DEV SERVER
+        const
+          basename = `${chunkId}.js`,
+          f = `${process.cwd()}/${basename}`
+
         if (initialChunkId === parseInt(chunkId, 10)) {
-          fs.writeFileSync(`${process.cwd()}/${chunkId}.js`, entryChunkCode(this._entry, chunkId))
+          src.push(path.join('/', basename))
+          fs.writeFileSync(f, entryChunkCode(this._entry, chunkId))
         }
         else {
-          fs.writeFileSync(`${process.cwd()}/${chunkId}.js`, chunkCode(this._entry, chunkId))
+          fs.writeFileSync(f, chunkCode(this._entry, chunkId))
         }
       })
+
+    return {
+      src
+    }
   }
 }
 

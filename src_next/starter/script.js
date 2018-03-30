@@ -4,20 +4,18 @@ const
   {error} = require('../utils/print'),
   Entry = require('../core/entry'),
   parseJS = require('../parsers/script'),
-  ScriptBundler = require('../bundlers/script')
+  ScriptBundler = require('../bundlers/script'),
+  perf = require('../utils/perf')
 
 let entryID = 0
 
 module.exports = async filename => {
   const entry = new Entry(entryID++)
   await processFile({entry, filename})
-  console.log(entry)
-  debugger
+  // console.log(entry)
 
   const bundler = new ScriptBundler(entry)
-  bundler.bundle()
-
-  debugger
+  return await bundler.bundle()
 
   async function processFile ({entry, filename, chunk}) {
     try {
