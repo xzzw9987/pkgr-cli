@@ -2,7 +2,7 @@ import a from './a.js'
 import './b'
 console.log(a)
 
-import('./b')
+import('./b').then(d => console.log(d))
 // import 'react-hot-loader/patch'
 // import { AppContainer } from 'react-hot-loader'
 //

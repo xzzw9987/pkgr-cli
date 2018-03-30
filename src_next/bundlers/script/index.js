@@ -1,3 +1,6 @@
+const
+    fs = require('fs')
+
 class Bundler {
   constructor (entry) {
     this._entry = entry
@@ -6,11 +9,22 @@ class Bundler {
   }
 
   bundle () {
+    const initialChunkId = Math.min.apply(null, Object.keys(this._entry.chunks))
 
+    Object
+      .keys(this._entry.chunks)
+      .forEach(chunkId => {
+        if (initialChunkId === parseInt(chunkId, 10)) {
+          fs.writeFileSync(`${process.cwd()}/${chunkId}.js`, entryChunkCode(this._entry, chunkId))
+        }
+        else {
+          fs.writeFileSync(`${process.cwd()}/${chunkId}.js`, chunkCode(this._entry, chunkId))
+        }
+      })
   }
 }
 
-function bootstrap (additionalCode) {
+function bootstrapCode (additionalCode) {
   return `
     ;(function(global){
       var modules = {}, caches = {}
@@ -19,7 +33,6 @@ function bootstrap (additionalCode) {
         if(!modules[id]) throw new Error(id + ': not found')
         var dependencies = modules[id][1]
         return function(path) {
-          var id = dependencies[path].id
           return requireById(dependencies[path].id)
         }
       }
@@ -57,7 +70,7 @@ function bootstrap (additionalCode) {
       
       global.pkgrRequire = function(o) {
         var chunkModules = o[0], bootId = o[1]
-        for(var i in m) {
+        for(var i in chunkModules) {
           if(!modules[i]) modules[i] = chunkModules[i]
         }
         modules[bootId] && requireById(bootId)
@@ -67,8 +80,8 @@ function bootstrap (additionalCode) {
   `
 }
 
-function mainChunk (entry, chunkId) {
-  return bootstrap(chunkCode(entry, chunkId))
+function entryChunkCode (entry, chunkId) {
+  return bootstrapCode(chunkCode(entry, chunkId))
 }
 
 function chunkCode (entry, chunkId) {
@@ -78,9 +91,10 @@ function chunkCode (entry, chunkId) {
 
   Object
     .keys(chunk.modules)
-    .forEach(module => {
-      code[module.id] =
-        `[function(require, module, exports, import){${module.code}}, ${
+    .forEach(moduleId => {
+      const module = chunk.modules[moduleId]
+      code[moduleId] =
+        `[function(require, module, exports, asyncImport){${module.code}}, ${
           JSON.stringify(
             module.dependencies.reduce((prev, now) => {
               prev[now.value] = {
@@ -95,11 +109,13 @@ function chunkCode (entry, chunkId) {
           }]`
     })
 
-  const c = `${Object.keys(code)
-    .reduce((prev, id, i) => {
-      prev += id + ':' + code[id] + (i === code.length - 1) ? '' : ','
-      return prev
-    }, '{')}}`
+  const
+    ks = Object.keys(code),
+    c = `${
+      ks.reduce((prev, id, i) => {
+        prev += id + ':' + code[id] + (i === ks.length - 1 ? '' : ',')
+        return prev
+      }, '{')}}`
 
   return `
     ;(function(global){

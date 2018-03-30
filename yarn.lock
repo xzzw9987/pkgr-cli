@@ -296,7 +296,7 @@ babel-generator@7.0.0-beta.3:
     source-map "^0.5.0"
     trim-right "^1.0.1"
 
-babel-generator@^6.18.0:
+babel-generator@^6.18.0, babel-generator@^6.26.1:
   version "6.26.1"
   resolved "https://registry.yarnpkg.com/babel-generator/-/babel-generator-6.26.1.tgz#1844408d3b8f0d35a404ea7ac180f087a601bd90"
   dependencies:

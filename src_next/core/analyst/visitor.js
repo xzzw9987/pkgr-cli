@@ -19,6 +19,18 @@ module.exports = function (callback) {
           callback(new Error(`Params passed to require should be string literal at line: ${path.node.loc.start.line}`), null)
           return
         }
+
+        if (path.node.callee.type.toLowerCase() === 'import') {
+          console.log('replace')
+          console.log(path)
+          path.replaceWith(
+            t.callExpression(
+              t.identifier('asyncImport'),
+              path.node.arguments
+            )
+          )
+        }
+
         callback(null, {value: arg.value, async: !(name === 'require')})
       }
 
