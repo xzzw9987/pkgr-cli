@@ -10,14 +10,18 @@ const
 let entryID = 0
 
 module.exports = async filename => {
-  const entry = new Entry(entryID++)
-  await processFile({entry, filename})
-  // console.log(entry)
+  const
+    entry = new Entry(entryID++),
+    bundler = new ScriptBundler(entry),
+    bundlePerf = perf()
 
-  const bundler = new ScriptBundler(entry)
-  return await bundler.bundle()
+  await processFile({entry, filename, bundler})
+  bundlePerf.end()
+  bundlePerf.entryInfo(entry)
 
-  async function processFile ({entry, filename, chunk}) {
+  return await bundler.bundle(filename)
+
+  async function processFile ({entry, filename, chunk, bundler}) {
     try {
       fs.statSync(filename)
     }
@@ -31,6 +35,7 @@ module.exports = async filename => {
           filename,
           entry,
           chunk,
+          bundler,
           nextCall: processFile
         })
         break

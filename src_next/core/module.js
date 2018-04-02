@@ -4,6 +4,18 @@ const
   path = require('path'),
   resolve = require('resolve')
 
+//  workerFarm = require('node-worker-farm'),
+//  workers = workerFarm(require.resolve('./analyst/javascript'))
+
+// const parseJS = v => {
+//   return new Promise(resolve => {
+//     workers(v, (err, output) => {
+//       // console.log(typeof output, 111)
+//       resolve(output)
+//     })
+//   })
+// }
+
 class Module {
   constructor (filename, id) {
     this.filename = filename
