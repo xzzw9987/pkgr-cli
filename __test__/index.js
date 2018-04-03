@@ -1,12 +1,10 @@
-import a from './a.js'
-console.log(a)
-import('./b').then(d => console.log(d))
-import('./c')
+import('./b')
+// import './d'
 
 // import 'react-hot-loader/patch'
 // import { AppContainer } from 'react-hot-loader'
 //
-// import React, { Component, Fragment } from 'react'
+import React, { Component, Fragment } from 'react'
 // import { render } from 'react-dom'
 // import App from './app'
 //

@@ -1,4 +1,3 @@
-import './index.css'
-console.log('bbsb')
-
+import React from 'react'
+console.log(React)
 export default 222

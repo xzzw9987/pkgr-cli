@@ -119,6 +119,8 @@ function bootstrapCode (additionalCode) {
         }
         modules[bootId] && requireById(bootId)
       }
+      
+      global.process = {env: '${process.env.NODE_ENV || 'development'}'}
       ${additionalCode}
     })(this)
   `
@@ -148,7 +150,9 @@ function chunkCode (entry, chunkId) {
     .forEach(moduleId => {
       const module = chunk.modules[moduleId]
       code[moduleId] =
-        `[function(require, module, exports, asyncImport){${module.code}}, ${
+        `[function(require, module, exports, asyncImport){
+        ${module.code}
+        }, ${
           JSON.stringify(
             module.dependencies.reduce((prev, now) => {
               prev[now.value] = {
