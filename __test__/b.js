@@ -1,2 +1,4 @@
-console.log('bbb')
+import './index.css'
+console.log('bbsb')
+
 export default 222

@@ -1,11 +1,15 @@
 const
   path = require('path'),
+  EventEmitter = require('events'),
+  watch = require('node-watch'),
   Chunk = require('./chunk'),
   Module = require('./module'),
   StylesheetModule = require('./stylesheetModule')
 
-class Entry {
+class Entry extends EventEmitter {
   constructor (entryId) {
+    super()
+
     this.entryId = entryId
     this.chunks = {}
     this.modules = {}
@@ -25,6 +29,7 @@ class Entry {
   addModule (module) {
     this.modules[module.id] = module
     this.modulesByFilename[module.filename] = module
+    this.watch(module)
   }
 
   instChunkIfNeeded (initialModule) {
@@ -34,11 +39,30 @@ class Entry {
 
   instModuleIfNeeded (filename) {
     if (this.modulesByFilename[filename]) return this.modulesByFilename[filename]
-    return new createModule(filename, this._makeModuleId())
+    return createModule(filename, this._makeModuleId())
   }
 
   isModuleExists (filename) {
     return !!this.modulesByFilename[filename]
+  }
+
+  watch (module) {
+    watch(module.filename, (evt, filename) => {
+      evt === 'update' && this.emit(evt, filename)
+    })
+  }
+
+  subscribe (evt, callback) {
+    if (!this.eventQueue) {
+      this.eventQueue = {}
+    }
+
+    if (!this.eventQueue[evt]) {
+      this.eventQueue[evt] = []
+      this.on(evt, (...args) => this.eventQueue[evt].forEach(callback => callback(...args)))
+    }
+
+    this.eventQueue.push(callback)
   }
 }
 

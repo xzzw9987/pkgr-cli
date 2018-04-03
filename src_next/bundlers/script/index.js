@@ -14,7 +14,6 @@ class Bundler {
   }
 
   async bundle (filename/*optional*/) {
-    // await new Promise(resolve => setTimeout(resolve, 5000))
     if (conf.env === 'production')
       return await this.bundleProd(filename)
     return await this.bundleDev(filename)
@@ -128,6 +127,16 @@ function bootstrapCode (additionalCode) {
 function entryChunkCode (entry, chunkId) {
   return bootstrapCode(chunkCode(entry, chunkId))
 }
+
+/*
+* module's shape
+* [
+*   someCode,
+*   {
+*     './a.js': {id: moduleId, chunk: chunkId// optional }
+*   }
+* ]
+**/
 
 function chunkCode (entry, chunkId) {
   const
