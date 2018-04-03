@@ -4,22 +4,25 @@ const
   {error} = require('../utils/print'),
   Entry = require('../core/entry'),
   parseJS = require('../parsers/script'),
-  ScriptBundler = require('../bundlers/script')
+  parseStylesheet = require('../parsers/css'),
+  ScriptBundler = require('../bundlers/script'),
+  perf = require('../utils/perf')
 
 let entryID = 0
 
 module.exports = async filename => {
-  const entry = new Entry(entryID++)
-  await processFile({entry, filename})
-  console.log(entry)
-  debugger
+  const
+    entry = new Entry(entryID++),
+    bundler = new ScriptBundler(entry),
+    bundlePerf = perf()
 
-  const bundler = new ScriptBundler(entry)
-  bundler.bundle()
+  await processFile({entry, filename, bundler})
+  bundlePerf.end()
+  bundlePerf.entryInfo(entry)
 
-  debugger
+  return await bundler.bundle(filename)
 
-  async function processFile ({entry, filename, chunk}) {
+  async function processFile ({entry, filename, chunk, bundler}) {
     try {
       fs.statSync(filename)
     }
@@ -33,12 +36,19 @@ module.exports = async filename => {
           filename,
           entry,
           chunk,
+          bundler,
           nextCall: processFile
         })
         break
-      // case '.css':
-      //   parseCSS(filename, id, depsMap, processFile)
-      //   break
+      case '.css':
+        await parseStylesheet({
+          filename,
+          entry,
+          chunk,
+          bundler,
+          nextCall: processFile
+        })
+        break
       // default:
       //   parseResource(filename, id, depsMap, processFile)
       //   break

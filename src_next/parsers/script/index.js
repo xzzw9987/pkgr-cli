@@ -1,4 +1,4 @@
-module.exports = async ({filename, entry, chunk, nextCall}) => {
+module.exports = async ({filename, entry, chunk, bundler, nextCall}) => {
   if (chunk && chunk.isModuleExists(filename)) return
 
   const m/*odule*/ = entry.instModuleIfNeeded(filename)
@@ -11,12 +11,13 @@ module.exports = async ({filename, entry, chunk, nextCall}) => {
     entry.addModule(m)
     await m.parse()
     const {dependencies} = m
-    dependencies.forEach(({value: depPath, filename, async}) => {
+    await Promise.all(dependencies.map(({value: depPath, filename, async}) =>
       nextCall({
         filename,
+        entry,
         chunk: async ? undefined : chunk,
-        entry
+        bundler
       })
-    })
+    ))
   }
 }

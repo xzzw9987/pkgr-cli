@@ -1,5 +1,10 @@
 const
-    fs = require('fs')
+  fs = require('fs'),
+  path = require('path'),
+  conf = require('../../config/global'),
+  outputPath = conf.output.path,
+  ensure = require('../../utils/ensureDirectoryExistence'),
+  devServer = require('../../devServer')()
 
 class Bundler {
   constructor (entry) {
@@ -8,19 +13,59 @@ class Bundler {
     this._chunkCode = []
   }
 
-  bundle () {
+  async bundle (filename/*optional*/) {
+    // await new Promise(resolve => setTimeout(resolve, 5000))
+    if (conf.env === 'production')
+      return await this.bundleProd(filename)
+    return await this.bundleDev(filename)
+  }
+
+  async bundleDev (filename) {
+    return await this.bundleCode(filename,
+      (filename, chunkId) => {
+        devServer.add(path.basename(filename), entryChunkCode(this._entry, chunkId))
+      },
+      (filename, chunkId) => {
+        devServer.add(path.basename(filename), chunkCode(this._entry, chunkId))
+      })
+  }
+
+  async bundleProd (filename) {
+    return await this.bundleCode(filename,
+      (filename, chunkId) => {
+        ensure(filename)
+        fs.writeFileSync(filename, entryChunkCode(this._entry, chunkId))
+      },
+      (filename, chunkId) => {
+        ensure(filename)
+        fs.writeFileSync(filename, chunkCode(this._entry, chunkId))
+      })
+  }
+
+  async bundleCode (filename, initialChunkCallback, chunkCallback) {
     const initialChunkId = Math.min.apply(null, Object.keys(this._entry.chunks))
+    let src = []
 
     Object
       .keys(this._entry.chunks)
       .forEach(chunkId => {
+        // @todo mapper
+        const
+          basename = `${chunkId}.js`,
+          f = path.join(outputPath, basename)
+
         if (initialChunkId === parseInt(chunkId, 10)) {
-          fs.writeFileSync(`${process.cwd()}/${chunkId}.js`, entryChunkCode(this._entry, chunkId))
+          src.push(path.join('/', basename))
+          initialChunkCallback && initialChunkCallback(f, chunkId)
         }
         else {
-          fs.writeFileSync(`${process.cwd()}/${chunkId}.js`, chunkCode(this._entry, chunkId))
+          chunkCallback && chunkCallback(f, chunkId)
         }
       })
+
+    return {
+      src
+    }
   }
 }
 

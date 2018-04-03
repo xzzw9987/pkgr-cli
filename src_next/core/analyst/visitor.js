@@ -12,7 +12,7 @@ module.exports = function (callback) {
         {bindings} = path.scope
       if (
         (name === 'require' && !('require' in bindings)) ||
-        (path.node.callee.type.toLowerCase() === 'import' && !('import' in bindings))) {
+        (path.node.callee.type.toLowerCase() === 'import')) {
         // Valid require
         const arg = path.node.arguments[0]
         if (!t.isStringLiteral(arg)) {
@@ -21,8 +21,6 @@ module.exports = function (callback) {
         }
 
         if (path.node.callee.type.toLowerCase() === 'import') {
-          console.log('replace')
-          console.log(path)
           path.replaceWith(
             t.callExpression(
               t.identifier('asyncImport'),

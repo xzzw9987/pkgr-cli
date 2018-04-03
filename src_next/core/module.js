@@ -4,6 +4,18 @@ const
   path = require('path'),
   resolve = require('resolve')
 
+//  workerFarm = require('node-worker-farm'),
+//  workers = workerFarm(require.resolve('./analyst/javascript'))
+
+// const parseJS = v => {
+//   return new Promise(resolve => {
+//     workers(v, (err, output) => {
+//       // console.log(typeof output, 111)
+//       resolve(output)
+//     })
+//   })
+// }
+
 class Module {
   constructor (filename, id) {
     this.filename = filename
@@ -14,7 +26,7 @@ class Module {
     this._ast = null
     this._content = null
 
-    this.type = path.extname('.js')
+    this.type = path.extname(filename)
     this._parsed = false
   }
 
@@ -43,22 +55,18 @@ class Module {
   }
 
   get dependencies () {
-    // if (null === this._dependencies) this.parse()
     return this._dependencies
   }
 
   get content () {
-    // if (null === this._content) this.parse()
     return this._content
   }
 
   get ast () {
-    // if ('.js' === this.type && null === this._ast) this.parse()
     return this._ast
   }
 
   get code () {
-    // if (null === this._code) this.parse()
     return this._code
   }
 

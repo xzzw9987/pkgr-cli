@@ -6,7 +6,7 @@ const
   configuration = require('../../config/babel'),
   visitor = require('./visitor')
 
-module.exports = ({content, filename}) => {
+module.exports = ({content, filename}, callback) => {
   let code, ast, compiled, dependencies = []
   if (/node_modules/.test(filename)) {
     ast = babylon.parse(content)
@@ -23,9 +23,11 @@ module.exports = ({content, filename}) => {
 
   code = generate(ast, {filename}).code
 
-  return {
+  const ret = {
     dependencies,
     ast,
     code
   }
+  callback && callback(null, ret)
+  return ret
 }

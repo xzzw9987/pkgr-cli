@@ -1,6 +1,8 @@
 const
+  path = require('path'),
   Chunk = require('./chunk'),
-  Module = require('./module')
+  Module = require('./module'),
+  StylesheetModule = require('./stylesheetModule')
 
 class Entry {
   constructor (entryId) {
@@ -32,7 +34,7 @@ class Entry {
 
   instModuleIfNeeded (filename) {
     if (this.modulesByFilename[filename]) return this.modulesByFilename[filename]
-    return new Module(filename, this._makeModuleId())
+    return new createModule(filename, this._makeModuleId())
   }
 
   isModuleExists (filename) {
@@ -41,3 +43,12 @@ class Entry {
 }
 
 module.exports = Entry
+
+function createModule (filename, id) {
+  const types = {
+    '.js': Module,
+    '.jsx': Module,
+    '.css': StylesheetModule,
+  }
+  return new (types[path.extname(filename)] || Module)(filename, id)
+}

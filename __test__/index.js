@@ -1,3 +1,4 @@
+import './index.css'
 import a from './a.js'
 import './b'
 console.log(a)
@@ -18,7 +19,7 @@ import('./b').then(d => console.log(d))
 //   </AppContainer>,
 //   document.querySelector('#root')
 // )
-
+//
 // if (module.hot) {
 //   module.hot.accept(() => {
 //     render(
@@ -27,5 +28,5 @@ import('./b').then(d => console.log(d))
 //     )
 //   })
 // }
-
+//
 // render(<App/>, document.body)
