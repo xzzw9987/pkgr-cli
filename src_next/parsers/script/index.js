@@ -18,7 +18,7 @@ const parse = async ({filename, entry, chunk, bundler, nextCall, updatedModule})
     entry.addModule(m)
     await parseModule(m)
 
-    entry.on('update', async __filename => {
+    entry.subscribe('update', async __filename => {
       if (__filename !== filename) return
       await parse({
         filename,

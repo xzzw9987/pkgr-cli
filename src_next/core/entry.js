@@ -62,7 +62,7 @@ class Entry extends EventEmitter {
       this.on(evt, (...args) => this.eventQueue[evt].forEach(callback => callback(...args)))
     }
 
-    this.eventQueue.push(callback)
+    this.eventQueue[evt].push(callback)
   }
 }
 

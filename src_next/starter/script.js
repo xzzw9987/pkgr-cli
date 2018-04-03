@@ -21,7 +21,7 @@ module.exports = async filename => {
   bundlePerf.end()
   bundlePerf.entryInfo(entry)
 
-  entry.on(EventTypes.MODULE_UPDATE, () => {
+  entry.subscribe(EventTypes.MODULE_UPDATE, () => {
     bundler.bundle(filename)
   })
 
