@@ -33,19 +33,11 @@ const parse = async ({filename, entry, chunk, bundler, nextCall, updatedModule})
     })
   }
   else {
-    const {dependencies} = m
-    await Promise.all(dependencies.map(({value: depPath, filename, async}) =>
-      nextCall({
-        filename,
-        entry,
-        chunk: async ? undefined : chunk,
-        bundler
-      })
-    ))
+    await parseModule(m, true)
   }
 
-  async function parseModule (m/*odule*/) {
-    await m.parse()
+  async function parseModule (m/*odule*/, dontParse = false) {
+    if (!dontParse) await m.parse()
     const {dependencies} = m
     await Promise.all(dependencies.map(({value: depPath, filename, async}) =>
       nextCall({
