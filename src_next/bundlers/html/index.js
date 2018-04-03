@@ -7,6 +7,7 @@ const
   devServer = require('../../devServer')()
 
 class Bundler {
+
   async bundle (filename, htmlString) {
     if (conf.env === 'production')
       return await this.bundleProd(filename, htmlString)
@@ -14,17 +15,33 @@ class Bundler {
   }
 
   async bundleDev (filename, htmlString) {
-    return await devServer.add(filename, htmlString)
+    await devServer.add(filename, htmlString)
+    return this.constructor.filename(filename)
   }
 
   async bundleProd (filename, htmlString) {
-    const f = path.join(outputPath, path.basename(filename))
+    const
+      loc = this.constructor.filename(filename),
+      f = loc.src
+
     ensure(f)
     await fs.writeFileSync(
       f,
       htmlString
     )
+    return loc
   }
+
+  static filename (f) {
+    if (conf.env === 'production')
+      return {
+        src: path.join(outputPath, path.basename(f))
+      }
+    return {
+      src: path.join('/', path.basename(f))
+    }
+  }
+
 }
 
 module.exports = Bundler

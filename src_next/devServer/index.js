@@ -7,23 +7,44 @@ let
   hmrServer
 
 module.exports = () => {
-  if (!server && conf.env !== 'production') server = require('child_process').fork(path.join(__dirname, `static.js`))
+  if (!server && conf.env !== 'production') {
+    server = require('child_process').fork(path.join(__dirname, `static.js`))
+    const msgQueue = {}
+    server.sendMessage = function (obj, callback) {
+      if (callback) {
+        const id = random()
+        msgQueue[id] = callback
+        obj = Object.assign({}, obj, {msgId: id})
+      }
+      this.send(obj)
+    }
+
+    server.on('message', o => {
+      const {msgId} = o
+      msgQueue[msgId] && msgQueue[msgId](o)
+      delete msgQueue[msgId]
+    })
+
+  }
+
   // if (!hmrServer && conf.env !== 'production') hmrServer = require('child_process').fork(path.join(__dirname, `hmr.js`))
   return conf.env === 'production'
     ? {add: noop, remove: noop, hmrUpdateTag: noop, hmrUpdate: noop, hmrAdd: noop}
     : {
-      add: (path, content) => {
-        server.send({
-          type: 'ADD',
-          path, content
-        })
-      },
-      remove: path => {
-        server.send({
-          type: 'REMOVE',
-          path
-        })
-      },
+      add: (path, content) =>
+        new Promise(resolve =>
+          server.sendMessage({
+            type: 'ADD',
+            path, content
+          }, resolve))
+      ,
+      remove: path =>
+        new Promise(resolve =>
+          server.sendMessage({
+            type: 'REMOVE',
+            path
+          }, resolve))
+      ,
       hmrUpdateTag: (tagId) => {
         hmrServer.send({
           type: 'TAG',
@@ -52,17 +73,6 @@ module.exports = () => {
 }
 
 function noop () {}
-
-function registerConfirmCallback (confirmCallback) {
-  const
-    cid = random(),
-    cb = val => {
-      cid === val.id && server.removeListener('message', cb)
-      cid === val.id && confirmCallback && confirmCallback()
-    }
-  // server.on('message', cb)
-  return cid
-}
 
 function random () {
   return `${(new Date).getTime()}_${parseInt(Math.random() * 10e7, 10)}`

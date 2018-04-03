@@ -44,12 +44,13 @@ function message (e) {
     case 'ADD':
       mockConf[e.path] = e.content.type === 'Buffer' ? Buffer.from(e.content.data) : e.content
       mock(mockConf)
-      process.send({id: e.messageID})
+      // console.log(e)
+      process.send({msgId: e.msgId})
       break
     case 'REMOVE':
       delete mockConf[e.path]
       mock(mockConf)
-      process.send({id: e.messageID})
+      process.send({msgId: e.msgId})
       break
     default:
       break

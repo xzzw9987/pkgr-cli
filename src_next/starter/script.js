@@ -4,6 +4,7 @@ const
   {error} = require('../utils/print'),
   Entry = require('../core/entry'),
   parseJS = require('../parsers/script'),
+  parseStylesheet = require('../parsers/css'),
   ScriptBundler = require('../bundlers/script'),
   perf = require('../utils/perf')
 
@@ -39,9 +40,15 @@ module.exports = async filename => {
           nextCall: processFile
         })
         break
-      // case '.css':
-      //   parseCSS(filename, id, depsMap, processFile)
-      //   break
+      case '.css':
+        await parseStylesheet({
+          filename,
+          entry,
+          chunk,
+          bundler,
+          nextCall: processFile
+        })
+        break
       // default:
       //   parseResource(filename, id, depsMap, processFile)
       //   break
