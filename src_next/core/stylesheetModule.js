@@ -11,8 +11,8 @@ const
 
 class StylesheetModule extends Module {
 
-  async parse (cssInJS = true) {
-    if (this._parsed) return
+  async parse (cssInJS = true/*Use this module in JS or <link />, JS default */) {
+    // if (this._parsed) return
     this.cssInJS = cssInJS
 
     const

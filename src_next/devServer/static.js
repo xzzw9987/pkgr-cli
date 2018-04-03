@@ -5,7 +5,7 @@ const
   nodeStatic = require('node-static'),
   file = new nodeStatic.Server('', {cache: false}),
   kill = require('kill-port'),
-  {log, error} = require('../utils/print'),
+  {log} = require('../utils/print'),
   {port} = require('../config/global'),
   mockConf = {}
 
@@ -44,7 +44,6 @@ function message (e) {
     case 'ADD':
       mockConf[e.path] = e.content.type === 'Buffer' ? Buffer.from(e.content.data) : e.content
       mock(mockConf)
-      // console.log(e)
       process.send({msgId: e.msgId})
       break
     case 'REMOVE':

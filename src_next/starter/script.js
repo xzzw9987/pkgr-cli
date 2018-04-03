@@ -6,6 +6,7 @@ const
   parseJS = require('../parsers/script'),
   parseStylesheet = require('../parsers/css'),
   ScriptBundler = require('../bundlers/script'),
+  EventTypes = require('../utils/eventTypes'),
   perf = require('../utils/perf')
 
 let entryID = 0
@@ -19,6 +20,10 @@ module.exports = async filename => {
   await processFile({entry, filename, bundler})
   bundlePerf.end()
   bundlePerf.entryInfo(entry)
+
+  entry.on(EventTypes.MODULE_UPDATE, () => {
+    bundler.bundle(filename)
+  })
 
   return await bundler.bundle(filename)
 

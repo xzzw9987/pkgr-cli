@@ -31,7 +31,7 @@ class Module {
   }
 
   async parse () {
-    if (this._parsed) return
+    // if (this._parsed) return
     const
       {filename} = this,
       content = fs.readFileSync(filename).toString()

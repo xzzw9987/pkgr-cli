@@ -1,9 +1,8 @@
-import './index.css'
 import a from './a.js'
-import './b'
 console.log(a)
-
 import('./b').then(d => console.log(d))
+import('./c')
+
 // import 'react-hot-loader/patch'
 // import { AppContainer } from 'react-hot-loader'
 //
