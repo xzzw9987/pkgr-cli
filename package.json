@@ -9,6 +9,16 @@
     "type": "git",
     "url": "git+https://github.com/xzzw9987/pkgr-cli.git"
   },
+  "scripts": {
+    "lint": "standard ---verbose",
+    "lint:fix": "standard --fix "
+  },
+  "standard": {
+    "ignore": [
+      "__test__/",
+      "src/"
+    ]
+  },
   "dependencies": {
     "autoprefixer": "^7.2.3",
     "babel-core": "^7.0.0-beta.3",
@@ -47,6 +57,7 @@
     "jest": "^22.4.3",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-hot-loader": "^3.1.3"
+    "react-hot-loader": "^3.1.3",
+    "standard": "^11.0.1"
   }
 }

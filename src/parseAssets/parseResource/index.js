@@ -41,14 +41,12 @@ function parse (filename, id, depsMap, processNextDep) {
         // change bundle file content
         devServer.add(depsMap.filename, generateBundle(depsMap.deps))
       }
-    }
-    catch (e) {
+    } catch (e) {
       error(e)
     }
   })
 
   shouldHMRAdd && devServer.hmrAdd(`function(require,module,exports){${deps[moduleId].code}}`, deps[moduleId].absolutePath, deps[moduleId].deps, moduleId)
-
 }
 
 function genJSCode (url) {
@@ -56,5 +54,3 @@ function genJSCode (url) {
     module.exports = '${url.replace(/'/g, '\\')}'
   `
 }
-
-

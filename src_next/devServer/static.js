@@ -1,13 +1,12 @@
 // Dev server should spawned as child_process
-const
-  http = require('http'),
-  mock = require('mock-fs'),
-  nodeStatic = require('node-static'),
-  file = new nodeStatic.Server('', {cache: false}),
-  kill = require('kill-port'),
-  {log} = require('../utils/print'),
-  {port} = require('../config/global'),
-  mockConf = {}
+const http = require('http')
+const mock = require('mock-fs')
+const nodeStatic = require('node-static')
+const file = new nodeStatic.Server('', {cache: false})
+const kill = require('kill-port')
+const {log} = require('../utils/print')
+const {port} = require('../config/global')
+const mockConf = {}
 
 ;(async () => {
   mock(mockConf)

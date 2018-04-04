@@ -5,7 +5,6 @@ const
 let json = {}
 try {
   json = JSON.parse(fs.readFileSync(path.join(process.cwd(), '.babelrc')).toString())
-}
-catch (e) {}
+} catch (e) {}
 
 module.exports = json

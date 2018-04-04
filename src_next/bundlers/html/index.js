@@ -1,17 +1,14 @@
-const
-  fs = require('fs'),
-  path = require('path'),
-  conf = require('../../config/global'),
-  outputPath = conf.output.path,
-  ensure = require('../../utils/ensureDirectoryExistence'),
-  devServer = require('../../devServer')()
+const fs = require('fs')
+const path = require('path')
+const conf = require('../../config/global')
+const outputPath = conf.output.path
+const ensure = require('../../utils/ensureDirectoryExistence')
+const devServer = require('../../devServer')()
 
 class Bundler {
-
   async bundle (filename, htmlString) {
-    if (conf.env === 'production')
-      return await this.bundleProd(filename, htmlString)
-    return await this.bundleDev(filename, htmlString)
+    if (conf.env === 'production') { return this.bundleProd(filename, htmlString) }
+    return this.bundleDev(filename, htmlString)
   }
 
   async bundleDev (filename, htmlString) {
@@ -20,9 +17,8 @@ class Bundler {
   }
 
   async bundleProd (filename, htmlString) {
-    const
-      loc = this.constructor.filename(filename),
-      f = loc.src
+    const loc = this.constructor.filename(filename)
+    const f = loc.src
 
     ensure(f)
     await fs.writeFileSync(
@@ -33,15 +29,15 @@ class Bundler {
   }
 
   static filename (f) {
-    if (conf.env === 'production')
+    if (conf.env === 'production') {
       return {
         src: path.join(outputPath, path.basename(f))
       }
+    }
     return {
       src: path.join('/', path.basename(f))
     }
   }
-
 }
 
 module.exports = Bundler

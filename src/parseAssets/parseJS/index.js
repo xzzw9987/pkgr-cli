@@ -25,12 +25,11 @@ function parse (filename, id, depsMap, processNextDep) {
   if (/node_modules/.test(filename)) {
     ast = babylon.parse(content)
     code = content
-  }
-  else {
+  } else {
     compiled = babel.transform(content, {
-        filename,
-        ...babelConf
-      }
+      filename,
+      ...babelConf
+    }
     )
     ast = compiled.ast
     code = compiled.code
@@ -55,8 +54,7 @@ function parse (filename, id, depsMap, processNextDep) {
           devServer.add(depsMap.filename, generateBundle(depsMap.deps))
         }, 100)
       }
-    }
-    catch (e) {
+    } catch (e) {
       error(e)
     }
   })
@@ -72,15 +70,13 @@ function parse (filename, id, depsMap, processNextDep) {
       depAbsolutePath = resolve(path.dirname(filename), depPath),
       depCached = findDep(depAbsolutePath)
 
-    if (!depAbsolutePath)
-      throw new Error(`Cannot find module ${depPath} in ${filename}`)
+    if (!depAbsolutePath) { throw new Error(`Cannot find module ${depPath} in ${filename}`) }
 
     if (!depCached) {
       const depModuleId = makeModuleId(entryId || 0)
       deps[moduleId].deps[depPath] = {id: depModuleId, path: depPath}
       processNextDep(depAbsolutePath, depModuleId)
-    }
-    else {
+    } else {
       const depModuleId = depCached.id
       deps[moduleId].deps[depPath] = {id: depModuleId, path: depPath}
     }

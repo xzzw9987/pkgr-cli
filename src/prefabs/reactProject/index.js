@@ -8,11 +8,10 @@ class App extends Component {
   }
 }
 
-render(<App/>, document.querySelector('#root'))
+render(<App />, document.querySelector('#root'))
 
 /**
  * if you want to use react-hot-loader ...
-
 
 import React, { Component } from 'react'
 import { render } from 'react-dom'
@@ -28,4 +27,3 @@ class App extends Component {
 render(<AppContainer><App/></AppContainer>, document.querySelector('#root'))
 
  */
-

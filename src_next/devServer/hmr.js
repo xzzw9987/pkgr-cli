@@ -1,7 +1,7 @@
-const w = require('ws'),
-  kill = require('kill-port'),
-  {error} = require('../utils/print'),
-  {hmrPort: port} = require('../config/global')
+const w = require('ws')
+const kill = require('kill-port')
+const {error} = require('../utils/print')
+const {hmrPort: port} = require('../config/global')
 
 ;(async () => {
   await kill(port)
@@ -49,8 +49,7 @@ const w = require('ws'),
 
   function broadcast (message) {
     server.clients.forEach(client =>
-      client.readyState === w.OPEN
-      && client.send(typeof message === 'string' ? message : JSON.stringify(message)))
+      client.readyState === w.OPEN &&
+      client.send(typeof message === 'string' ? message : JSON.stringify(message)))
   }
-
 })()

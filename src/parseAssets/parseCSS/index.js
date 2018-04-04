@@ -50,7 +50,7 @@ function parse (filename, id, depsMap, processNextDep) {
     absolutePath: filename,
     deps: {},
     content: css,
-    code,
+    code
   }
 
   for (let assetInfo of assets) {
@@ -65,21 +65,17 @@ function parse (filename, id, depsMap, processNextDep) {
         log(`Change Detected: \n${filename}`)
         parse(filename, id, depsMap, processNextDep)
         setTimeout(() => {
-
           if (moduleId < 0) {
             devServer.hmrUpdateTag(path.basename(depsMap.filename, '.css'))
             devServer.add(depsMap.filename, deps[moduleId].content)
-          }
-
-          else {
+          } else {
             devServer.hmrUpdate(`function(require,module,exports){${deps[moduleId].code}}`, deps[moduleId].absolutePath, deps[moduleId].deps, moduleId)
             // change bundle file content
             devServer.add(depsMap.filename, generateBundle(depsMap.deps))
           }
         }, 100)
       }
-    }
-    catch (e) {
+    } catch (e) {
       error(e)
     }
   })
@@ -114,11 +110,9 @@ function map (base, assets = new Set()) {
       })
 
       return conf.env === 'production' ? path.join('../', bundlePath(name).relative) : name
-    }
-    catch (e) {
+    } catch (e) {
       error(e)
       return p
     }
-
   }
 }

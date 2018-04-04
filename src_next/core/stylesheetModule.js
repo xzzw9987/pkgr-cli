@@ -1,28 +1,25 @@
-const
-  path = require('path'),
-  url = require('url'),
-  fs = require('fs'),
-  Module = require('./module'),
-  autoprefixer = require('autoprefixer'),
-  postcss = require('postcss'),
-  AssetBundler = require('../bundlers/asset'),
-  cssUrlMapper = require('postcss-url-mapper'),
-  md5 = require('../utils/md5')
+const path = require('path')
+const url = require('url')
+const fs = require('fs')
+const Module = require('./module')
+const autoprefixer = require('autoprefixer')
+const postcss = require('postcss')
+const AssetBundler = require('../bundlers/asset')
+const cssUrlMapper = require('postcss-url-mapper')
+const md5 = require('../utils/md5')
 
 class StylesheetModule extends Module {
-
-  async parse (cssInJS = true/*Use this module in JS or <link />, JS default */) {
+  async parse (cssInJS = true/* Use this module in JS or <link />, JS default */) {
     // if (this._parsed) return
     this.cssInJS = cssInJS
 
-    const
-      {filename} = this,
-      content = this._content = fs.readFileSync(filename).toString(),
-      // @todo postcss plugins
-      postcssPlugins = [
-        autoprefixer,
-        cssUrlMapper(map(filename))
-      ]
+    const {filename} = this
+    const content = this._content = fs.readFileSync(filename).toString()
+    // @todo postcss plugins
+    const postcssPlugins = [
+      autoprefixer,
+      cssUrlMapper(map(filename))
+    ]
 
     let css
 
@@ -55,18 +52,16 @@ class StylesheetModule extends Module {
 }
 
 function map (base) {
-  const assetBundler = new AssetBundler
+  const assetBundler = new AssetBundler()
   return src => {
     const p = url.resolve(base, src)
     try {
-      const
-        content = fs.readFileSync(p),
-        name = `${md5(content)}${path.extname(src)}`
+      const content = fs.readFileSync(p)
+      const name = `${md5(content)}${path.extname(src)}`
 
       assetBundler.bundle(name, content)
       return AssetBundler.filename(name).src
-    }
-    catch (e) {
+    } catch (e) {
       console.log(e)
     }
   }

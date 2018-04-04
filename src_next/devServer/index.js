@@ -1,10 +1,8 @@
-const
-  path = require('path'),
-  conf = require('../config/global')
+const path = require('path')
+const conf = require('../config/global')
 
-let
-  server,
-  hmrServer
+let server
+let hmrServer
 
 module.exports = () => {
   if (!server && conf.env !== 'production') {
@@ -24,7 +22,6 @@ module.exports = () => {
       msgQueue[msgId] && msgQueue[msgId](o)
       delete msgQueue[msgId]
     })
-
   }
 
   // if (!hmrServer && conf.env !== 'production') hmrServer = require('child_process').fork(path.join(__dirname, `hmr.js`))
@@ -35,16 +32,15 @@ module.exports = () => {
         new Promise(resolve =>
           server.sendMessage({
             type: 'ADD',
-            path, content
-          }, resolve))
-      ,
+            path,
+            content
+          }, resolve)),
       remove: path =>
         new Promise(resolve =>
           server.sendMessage({
             type: 'REMOVE',
             path
-          }, resolve))
-      ,
+          }, resolve)),
       hmrUpdateTag: (tagId) => {
         hmrServer.send({
           type: 'TAG',
@@ -75,6 +71,5 @@ module.exports = () => {
 function noop () {}
 
 function random () {
-  return `${(new Date).getTime()}_${parseInt(Math.random() * 10e7, 10)}`
+  return `${(new Date()).getTime()}_${parseInt(Math.random() * 10e7, 10)}`
 }
-

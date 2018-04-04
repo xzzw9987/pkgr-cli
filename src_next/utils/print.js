@@ -1,6 +1,5 @@
-const
-  chalk = require('chalk'),
-  log = console.log
+const chalk = require('chalk')
+const log = console.log
 
 exports.error = msg => log(chalk.bold.red(msg))
 

@@ -1,8 +1,7 @@
-const
-  parseJS = require('./analyst/javascript'),
-  fs = require('fs'),
-  path = require('path'),
-  resolve = require('resolve')
+const parseJS = require('./analyst/javascript')
+const fs = require('fs')
+const path = require('path')
+const resolve = require('resolve')
 
 //  workerFarm = require('node-worker-farm'),
 //  workers = workerFarm(require.resolve('./analyst/javascript'))
@@ -32,9 +31,8 @@ class Module {
 
   async parse () {
     // if (this._parsed) return
-    const
-      {filename} = this,
-      content = fs.readFileSync(filename).toString()
+    const {filename} = this
+    const content = fs.readFileSync(filename).toString()
 
     this._content = content
 
@@ -69,7 +67,6 @@ class Module {
   get code () {
     return this._code
   }
-
 }
 
 module.exports = Module

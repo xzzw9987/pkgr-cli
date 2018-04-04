@@ -1,21 +1,19 @@
-const
-  fs = require('fs'),
-  path = require('path'),
-  {error} = require('../utils/print'),
-  Entry = require('../core/entry'),
-  parseJS = require('../parsers/script'),
-  parseStylesheet = require('../parsers/css'),
-  ScriptBundler = require('../bundlers/script'),
-  EventTypes = require('../utils/eventTypes'),
-  perf = require('../utils/perf')
+const fs = require('fs')
+const path = require('path')
+const {error} = require('../utils/print')
+const Entry = require('../core/entry')
+const parseJS = require('../parsers/script')
+const parseStylesheet = require('../parsers/css')
+const ScriptBundler = require('../bundlers/script')
+const EventTypes = require('../utils/eventTypes')
+const perf = require('../utils/perf')
 
 let entryID = 0
 
 module.exports = async filename => {
-  const
-    entry = new Entry(entryID++),
-    bundler = new ScriptBundler(entry),
-    bundlePerf = perf()
+  const entry = new Entry(entryID++)
+  const bundler = new ScriptBundler(entry)
+  const bundlePerf = perf()
 
   await processFile({entry, filename, bundler})
   bundlePerf.end()
@@ -25,13 +23,12 @@ module.exports = async filename => {
     bundler.bundle(filename)
   })
 
-  return await bundler.bundle(filename)
+  return bundler.bundle(filename)
 
   async function processFile ({entry, filename, chunk, bundler}) {
     try {
       fs.statSync(filename)
-    }
-    catch (e) {
+    } catch (e) {
       error(`Can't find file: ${filename}`)
       return
     }

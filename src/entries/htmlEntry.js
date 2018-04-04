@@ -15,8 +15,7 @@ const
 module.exports = function htmlEntry (filename) {
   try {
     fs.statSync(filename)
-  }
-  catch (e) {
+  } catch (e) {
     // @todo
     // Show an explicit error
     console.error(`Can't find file: ${filename}`)

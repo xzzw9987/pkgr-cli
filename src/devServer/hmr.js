@@ -48,7 +48,7 @@ kill(port)
 
     function broadcast (message) {
       server.clients.forEach(client =>
-        client.readyState === w.OPEN
-        && client.send(typeof message === 'string' ? message : JSON.stringify(message)))
+        client.readyState === w.OPEN &&
+        client.send(typeof message === 'string' ? message : JSON.stringify(message)))
     }
   })
