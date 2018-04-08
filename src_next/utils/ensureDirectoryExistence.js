@@ -1,6 +1,5 @@
-const
-  fs = require('fs'),
-  path = require('path')
+const fs = require('fs')
+const path = require('path')
 
 module.exports = function ensureDirectoryExistence (filePath) {
   const dirname = path.dirname(filePath)

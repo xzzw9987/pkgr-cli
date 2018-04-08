@@ -8,7 +8,7 @@ const parse = async ({filename, entry, chunk, bundler, nextCall, updatedModule})
 
   if (chunk && chunk.isModuleExists(filename)) return
 
-  const m/*odule*/ = entry.instModuleIfNeeded(filename)
+  const m/* odule */ = entry.instModuleIfNeeded(filename)
   if (!chunk) {
     chunk = entry.instChunkIfNeeded(m)
     entry.addChunk(chunk)
@@ -26,17 +26,16 @@ const parse = async ({filename, entry, chunk, bundler, nextCall, updatedModule})
         entry,
         chunk,
         bundler,
-        updatedModule: m, /*force update*/
+        updatedModule: m, /* force update */
         nextCall
       })
       entry.emit(EventTypes.MODULE_UPDATE)
     })
-  }
-  else {
+  } else {
     await parseModule(m, true)
   }
 
-  async function parseModule (m/*odule*/, dontParse = false) {
+  async function parseModule (m/* odule */, dontParse = false) {
     if (!dontParse) await m.parse()
     const {dependencies} = m
     await Promise.all(dependencies.map(({value: depPath, filename, async}) =>

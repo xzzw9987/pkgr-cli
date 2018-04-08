@@ -15,7 +15,8 @@ module.exports = () => {
       add: (path, content) => {
         server.send({
           type: 'ADD',
-          path, content
+          path,
+          content
         })
       },
       remove: path => {
@@ -65,6 +66,5 @@ function registerConfirmCallback (confirmCallback) {
 }
 
 function random () {
-  return `${(new Date).getTime()}_${parseInt(1000000 * Math.random(), 10)}`
+  return `${(new Date()).getTime()}_${parseInt(1000000 * Math.random(), 10)}`
 }
-

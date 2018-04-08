@@ -1,27 +1,24 @@
-const
-  url = require('url'),
-  fs = require('fs'),
-  parse5 = require('parse5'),
-  htmlUtils = require('parse5-utils'),
-  openurl = require('openurl'),
-  conf = require('../config/global'),
-  jsEntry = require('./script'),
-  {error} = require('../utils/print'),
-  TemplateBundler = require('../bundlers/html')
+const url = require('url')
+const fs = require('fs')
+const parse5 = require('parse5')
+const jsEntry = require('./script')
+const TemplateBundler = require('../bundlers/html')
+
+// const htmlUtils = require('parse5-utils')
+// const openurl = require('openurl')
+// const conf = require('../config/global')
+// const {error} = require('../utils/print')
 
 module.exports = async filename => {
-
   try {
     fs.statSync(filename)
-  }
-  catch (e) {
+  } catch (e) {
     console.error(`Can't find file: ${filename}`)
     return
   }
 
-  const
-    document = parse5.parse(fs.readFileSync(filename).toString()),
-    bundler = new TemplateBundler
+  const document = parse5.parse(fs.readFileSync(filename).toString())
+  const bundler = new TemplateBundler()
 
   await traverse(document)
   await bundler.bundle(filename, parse5.serialize(document))

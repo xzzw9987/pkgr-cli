@@ -22,7 +22,7 @@ module.exports = async () => {
     type: 'list',
     name: 'value',
     message: 'Which type of project do you want ?',
-    choices: [{name: 'React', value: 'react'}, {name: 'I don\'t want any framework', value: 'none'}],
+    choices: [{name: 'React', value: 'react'}, {name: 'I don\'t want any framework', value: 'none'}]
   })
 
   project['type'] = t.value

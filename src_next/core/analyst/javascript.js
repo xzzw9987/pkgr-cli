@@ -1,25 +1,31 @@
-const
-  babylon = require('babylon'),
-  babel = require('babel-core'),
-  generate = require('babel-generator').default,
-  traverse = require('babel-traverse').default,
-  configuration = require('../../config/babel'),
-  visitor = require('./visitor')
+const babylon = require('babylon')
+const babel = require('babel-core')
+const generate = require('babel-generator').default
+const traverse = require('babel-traverse').default
+const configuration = require('../../config/babel')
+const visitor = require('./visitor')
+const {error} = require('../../utils/print')
 
 module.exports = ({content, filename}, callback) => {
-  let code, ast, compiled, dependencies = []
+  let code
+  let ast
+  let compiled
+  let dependencies = []
+
   if (/node_modules/.test(filename)) {
     ast = babylon.parse(content)
-  }
-  else {
+  } else {
     compiled = babel.transform(content, {
-        filename,
-        ...configuration
-      }
+      filename,
+      ...configuration
+    }
     )
     ast = compiled.ast
   }
-  traverse(ast, visitor((err, result) => result && dependencies.push(result)))
+  traverse(ast, visitor((err, result) => {
+    if (err) error(err)
+    result && dependencies.push(result)
+  }))
 
   code = generate(ast, {filename}).code
 

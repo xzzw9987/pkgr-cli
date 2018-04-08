@@ -7,9 +7,9 @@ const t = require('babel-types')
 module.exports = function (callback) {
   return {
     CallExpression (path) {
-      const
-        {name} = path.node.callee,
-        {bindings} = path.scope
+      const {name} = path.node.callee
+      const {bindings} = path.scope
+
       if (
         (name === 'require' && !('require' in bindings)) ||
         (path.node.callee.type.toLowerCase() === 'import')) {
@@ -31,7 +31,6 @@ module.exports = function (callback) {
 
         callback(null, {value: arg.value, async: !(name === 'require')})
       }
-
     }
   }
 }

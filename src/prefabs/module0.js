@@ -5,7 +5,7 @@ module.exports = depsMap => {
   global.process = {env: {'NODE_ENV': '${conf.env}'}}
   r(1)
   
-  ${conf.env === 'production' ? `}`: `var socket = new WebSocket('ws://localhost:12321')
+  ${conf.env === 'production' ? `}` : `var socket = new WebSocket('ws://localhost:12321')
   socket.addEventListener('open', function() {
       console.log('[HMR Server] Connected')
   })

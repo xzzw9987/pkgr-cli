@@ -1,11 +1,10 @@
 const globalConf = require('./config/global')
 module.exports = config => {
   Object.assign(globalConf, config)
-  const
-    path = require('path'),
-    jsEntry = require('./starter/script'),
-    htmlEntry = require('./starter/html'),
-    cssEntry = require('./starter/css')
+  const path = require('path')
+  const jsEntry = require('./starter/script')
+  const htmlEntry = require('./starter/html')
+  const cssEntry = require('./starter/css')
 
   let {entry} = config
   if (typeof entry === 'string') entry = [entry]

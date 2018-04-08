@@ -33,8 +33,7 @@ module.exports = function cssEntry (filename) {
   function processFile (filename, id) {
     try {
       fs.statSync(filename)
-    }
-    catch (e) {
+    } catch (e) {
       error(`Can't find file: ${filename}`)
       return
     }

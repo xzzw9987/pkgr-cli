@@ -1,10 +1,9 @@
-const
-  fs = require('fs'),
-  path = require('path'),
-  conf = require('../../config/global'),
-  outputPath = conf.output.path,
-  ensure = require('../../utils/ensureDirectoryExistence'),
-  devServer = require('../../devServer')()
+const fs = require('fs')
+const path = require('path')
+const conf = require('../../config/global')
+const outputPath = conf.output.path
+const ensure = require('../../utils/ensureDirectoryExistence')
+const devServer = require('../../devServer')()
 
 class Bundler {
   constructor (entry) {
@@ -13,14 +12,13 @@ class Bundler {
     this._chunkCode = []
   }
 
-  async bundle (filename/*optional*/) {
-    if (conf.env === 'production')
-      return await this.bundleProd(filename)
-    return await this.bundleDev(filename)
+  async bundle (filename/* optional */) {
+    if (conf.env === 'production') { return this.bundleProd(filename) }
+    return this.bundleDev(filename)
   }
 
   async bundleDev (filename) {
-    return await this.bundleCode(filename,
+    return this.bundleCode(filename,
       (filename, chunkId) => {
         devServer.add(path.basename(filename), entryChunkCode(this._entry, chunkId))
       },
@@ -30,7 +28,7 @@ class Bundler {
   }
 
   async bundleProd (filename) {
-    return await this.bundleCode(filename,
+    return this.bundleCode(filename,
       (filename, chunkId) => {
         ensure(filename)
         fs.writeFileSync(filename, entryChunkCode(this._entry, chunkId))
@@ -49,15 +47,13 @@ class Bundler {
       .keys(this._entry.chunks)
       .forEach(chunkId => {
         // @todo mapper
-        const
-          basename = `${chunkId}.js`,
-          f = path.join(outputPath, basename)
+        const basename = `${chunkId}.js`
+        const f = path.join(outputPath, basename)
 
         if (initialChunkId === parseInt(chunkId, 10)) {
           src.push(path.join('/', basename))
           initialChunkCallback && initialChunkCallback(f, chunkId)
-        }
-        else {
+        } else {
           chunkCallback && chunkCallback(f, chunkId)
         }
       })
@@ -141,9 +137,8 @@ function entryChunkCode (entry, chunkId) {
 **/
 
 function chunkCode (entry, chunkId) {
-  const
-    code = {},
-    chunk = entry.chunks[chunkId]
+  const code = {}
+  const chunk = entry.chunks[chunkId]
 
   Object
     .keys(chunk.modules)
@@ -153,27 +148,26 @@ function chunkCode (entry, chunkId) {
         `[function(require, module, exports, asyncImport){
         ${module.code}
         }, ${
-          JSON.stringify(
-            module.dependencies.reduce((prev, now) => {
-              prev[now.value] = {
-                id: entry.modulesByFilename[now.filename].id
-              }
-              if (now.async) {
-                prev[now.value].chunk = prev[now.value].id
-              }
-              return prev
-            }, {})
-          )
-          }]`
+  JSON.stringify(
+    module.dependencies.reduce((prev, now) => {
+      prev[now.value] = {
+        id: entry.modulesByFilename[now.filename].id
+      }
+      if (now.async) {
+        prev[now.value].chunk = prev[now.value].id
+      }
+      return prev
+    }, {})
+  )
+}]`
     })
 
-  const
-    ks = Object.keys(code),
-    c = `${
-      ks.reduce((prev, id, i) => {
-        prev += id + ':' + code[id] + (i === ks.length - 1 ? '' : ',')
-        return prev
-      }, '{')}}`
+  const ks = Object.keys(code)
+  const c = `${
+    ks.reduce((prev, id, i) => {
+      prev += id + ':' + code[id] + (i === ks.length - 1 ? '' : ',')
+      return prev
+    }, '{')}}`
 
   return `
     ;(function(global){
